@@ -683,6 +683,51 @@
             box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
         }
         
+        /* Milestone Editor */
+        .milestone-editor {
+            display: none;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 1px solid #dfe6e9;
+        }
+        
+        .milestone-editor.active {
+            display: block;
+        }
+        
+        .milestone-setting-row {
+            margin-bottom: 15px;
+        }
+        
+        .milestone-setting-row label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .milestone-setting-row input,
+        .milestone-setting-row textarea,
+        .milestone-setting-row select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #dfe6e9;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+        
+        .milestone-setting-row textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .milestone-day-tasks {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        
         /* Animations */
         @keyframes pulse {
             0% { transform: scale(1); }
@@ -976,11 +1021,17 @@
                 <div class="stats-section" style="margin-top: 30px;">
                     <div class="section-title">
                         <h2>Current Milestone</h2>
+                        <button class="btn btn-outline" id="edit-milestone-btn" style="margin-left: auto;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 5px;">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                            </svg>
+                            Edit
+                        </button>
                     </div>
                     
                     <div style="margin-top: 15px;">
                         <h3 style="color: var(--primary); margin-bottom: 10px;" id="current-phase-name">Web Development Foundations</h3>
-                        <p id="current-phase-duration">Duration: 6 months</p>
+                        <p id="current-phase-duration">Duration: 3 months</p>
                         <p id="current-phase-focus">Focus: HTML/CSS, JavaScript, Basic Security</p>
                         
                         <div style="margin-top: 20px;">
@@ -1011,6 +1062,46 @@
                                     <div id="skill-3-progress-bar" style="height: 100%; width: 0%; background-color: var(--danger); border-radius: 4px;"></div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Milestone Editor -->
+                    <div class="milestone-editor" id="milestone-editor">
+                        <div class="milestone-setting-row">
+                            <label for="milestone-name">Milestone Name</label>
+                            <input type="text" id="milestone-name" value="Web Development Foundations">
+                        </div>
+                        
+                        <div class="milestone-setting-row">
+                            <label for="milestone-duration">Duration (months)</label>
+                            <select id="milestone-duration">
+                                <option value="3">3 months</option>
+                                <option value="6">6 months</option>
+                                <option value="12">1 year</option>
+                            </select>
+                        </div>
+                        
+                        <div class="milestone-setting-row">
+                            <label for="milestone-focus">Focus Areas</label>
+                            <textarea id="milestone-focus">HTML/CSS, JavaScript, Basic Security</textarea>
+                        </div>
+                        
+                        <div class="milestone-setting-row">
+                            <label>Skills to Track</label>
+                            <div class="milestone-day-tasks">
+                                <input type="text" id="skill-1-input" value="HTML/CSS Fundamentals" style="margin-bottom: 5px;">
+                                <input type="text" id="skill-2-input" value="JavaScript Mastery" style="margin-bottom: 5px;">
+                                <input type="text" id="skill-3-input" value="Security Basics">
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <button class="btn btn-primary" id="save-milestone-btn" style="margin-right: 10px;">
+                                Save Milestone
+                            </button>
+                            <button class="btn btn-outline" id="cancel-milestone-edit">
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1069,49 +1160,49 @@
         // Generate 3-year learning roadmap (2024-2027)
         function generateLearningRoadmap() {
             const roadmap = {
-                // Phase 1: Foundations (6 months)
+                // Phase 1: Foundations (3 months)
                 phase1: {
                     name: "Web Development Foundations",
-                    duration: "6 months",
+                    duration: "3 months",
                     focus: "HTML/CSS, JavaScript, Basic Security",
                     tasks: {
                         sunday: [
-                        "Practice: Rebuild websites from scratch",
-                        "JavaScript coding challenges",
-                        "Security quiz",
-                        "Content creation: Write blog post",
-                        "Relax and recharge"
+                            "Review HTML basics: elements, attributes",
+                            "Practice CSS selectors and properties",
+                            "JavaScript variables and data types",
+                            "Basic DOM manipulation exercises",
+                            "Relax and recharge"
                         ],
                         monday: [
                             "HTML5 semantic elements practice",
-                            "CSS Flexbox/Grid layout exercises",
-                            "JavaScript variables and functions",
-                            "Basic DOM manipulation",
+                            "CSS Flexbox layout exercises",
+                            "JavaScript functions and scope",
+                            "Basic event handling",
                             "Security best practices overview"
                         ],
                         tuesday: [
-                            "CSS animations and transitions",
+                            "CSS Grid layout exercises",
                             "JavaScript arrays and objects",
-                            "Event handling in JavaScript",
+                            "DOM manipulation project",
                             "Basic authentication concepts",
                             "Project: Personal portfolio page"
                         ],
                         wednesday: [
                             "Responsive design principles",
-                            "JavaScript ES6 features",
-                            "Async JavaScript (callbacks, promises)",
+                            "JavaScript ES6 features (let/const, arrow functions)",
+                            "Async JavaScript (callbacks)",
                             "Password security fundamentals",
                             "Project: Responsive landing page"
                         ],
                         thursday: [
-                            "CSS preprocessors (SASS/SCSS)",
-                            "JavaScript modules",
-                            "Browser storage (localStorage, cookies)",
+                            "CSS transitions and animations",
+                            "JavaScript modules and imports",
+                            "Browser storage (localStorage)",
                             "HTTPS and SSL basics",
                             "Project: Todo application"
                         ],
                         friday: [
-                            "CSS frameworks (Bootstrap/Tailwind)",
+                            "CSS frameworks (Bootstrap basics)",
                             "JavaScript error handling",
                             "Web performance optimization",
                             "Cross-site scripting (XSS) overview",
@@ -1120,50 +1211,49 @@
                         saturday: [
                             "Weekly review: HTML/CSS concepts",
                             "Weekly review: JavaScript concepts",
-                            "Security review",
+                            "Security review quiz",
                             "Project work",
                             "Plan next week's learning"
-                        ],
-                       
+                        ]
                     }
                 },
-                // Phase 2: Intermediate (1 year)
+                // Phase 2: Intermediate (6 months)
                 phase2: {
                     name: "Full Stack Development",
-                    duration: "1 year",
+                    duration: "6 months",
                     focus: "React, Node.js, Databases, APIs",
                     tasks: {
                         monday: [
-                            "React component development",
+                            "React component basics",
                             "Node.js server setup",
-                            "REST API design",
+                            "REST API concepts",
                             "Database design principles",
-                            "Authentication systems"
+                            "Authentication systems overview"
                         ],
                         tuesday: [
-                            "React hooks",
+                            "React hooks (useState, useEffect)",
                             "Express.js routing",
                             "API security practices",
-                            "SQL vs NoSQL",
+                            "SQL vs NoSQL comparison",
                             "Project: Full-stack application"
                         ],
                         wednesday: [
-                            "React state management",
-                            "MongoDB/Mongoose",
+                            "React state management (Context API)",
+                            "MongoDB/Mongoose basics",
                             "JWT authentication",
-                            "Rate limiting and throttling",
+                            "Rate limiting concepts",
                             "Project: Authentication system"
                         ],
                         thursday: [
-                            "React performance optimization",
-                            "REST vs GraphQL",
-                            "Database indexing",
+                            "React performance techniques",
+                            "REST vs GraphQL comparison",
+                            "Database indexing basics",
                             "Input validation",
                             "Project: API development"
                         ],
                         friday: [
-                            "React testing (Jest)",
-                            "WebSockets",
+                            "React testing (Jest basics)",
+                            "WebSockets introduction",
                             "SQL injection prevention",
                             "CORS and CSRF protection",
                             "Project: Real-time application"
@@ -1176,64 +1266,64 @@
                             "Plan next week's learning"
                         ],
                         sunday: [
-                            "Practice: Build a CMS",
-                            "Algorithm challenges",
-                            "Security CTF practice",
-                            "Content creation: Tutorial video",
+                            "Practice: Build a simple CMS",
+                            "Algorithm challenges (easy level)",
+                            "Security CTF practice (beginner)",
+                            "Content creation: Write blog post",
                             "Relax and recharge"
                         ]
                     }
                 },
-                // Phase 3: Advanced (1.5 years)
+                // Phase 3: Advanced (6 months)
                 phase3: {
                     name: "Advanced Specialization",
-                    duration: "1.5 years",
+                    duration: "6 months",
                     focus: "Cybersecurity, Advanced React, Cloud, Content Creation",
                     tasks: {
                         monday: [
-                            "Penetration testing practice",
+                            "Penetration testing basics",
                             "React performance optimization",
-                            "AWS/Azure fundamentals",
-                            "Video script writing",
-                            "Threat modeling"
+                            "AWS fundamentals",
+                            "Video script writing basics",
+                            "Threat modeling introduction"
                         ],
                         tuesday: [
                             "Security vulnerability research",
                             "React concurrent features",
-                            "Serverless architecture",
-                            "Content planning",
-                            "Security automation"
+                            "Serverless architecture basics",
+                            "Content planning session",
+                            "Security automation basics"
                         ],
                         wednesday: [
-                            "Bug bounty practice",
+                            "Bug bounty practice (beginner)",
                             "Advanced React patterns",
-                            "CI/CD pipelines",
-                            "Video editing",
-                            "Incident response"
+                            "CI/CD pipeline basics",
+                            "Video editing basics",
+                            "Incident response overview"
                         ],
                         thursday: [
-                            "Security tool development",
-                            "Micro-frontends",
+                            "Security tool development basics",
+                            "Micro-frontends introduction",
                             "Kubernetes basics",
-                            "Audience engagement",
-                            "Security compliance"
+                            "Audience engagement strategies",
+                            "Security compliance overview"
                         ],
                         friday: [
                             "Red team/blue team exercises",
                             "WebAssembly with React",
-                            "Cloud security",
-                            "Content analytics",
+                            "Cloud security basics",
+                            "Content analytics review",
                             "Project: Security tool"
                         ],
                         saturday: [
                             "Weekly review: Security concepts",
                             "Weekly review: Advanced frontend",
-                            "Cloud review",
-                            "Content strategy",
+                            "Cloud services review",
+                            "Content strategy session",
                             "Plan next week's learning"
                         ],
                         sunday: [
-                            "Practice: Capture the flag",
+                            "Practice: Capture the flag (beginner)",
                             "Open-source contributions",
                             "Cloud certification prep",
                             "Content creation: Live stream",
@@ -1286,9 +1376,9 @@
             const totalWeeks = 156; // 3 years in weeks
             const currentWeek = gameState.currentWeek % totalWeeks; // Cycle through roadmap
             
-            if (currentWeek < 26) return gameState.learningRoadmap.phase1;
-            if (currentWeek < 78) return gameState.learningRoadmap.phase2;
-            return gameState.learningRoadmap.phase3;
+            if (currentWeek < 13) return gameState.learningRoadmap.phase1; // 3 months (13 weeks)
+            if (currentWeek < 39) return gameState.learningRoadmap.phase2; // +6 months (26 weeks)
+            return gameState.learningRoadmap.phase3; // +6 months (26 weeks)
         }
 
         function updateCurrentPhaseDisplay() {
@@ -1374,6 +1464,16 @@
         const editableTaskList = document.getElementById('editable-task-list');
         const addTaskBtn = document.getElementById('add-task-btn');
         const saveTasksBtn = document.getElementById('save-tasks-btn');
+        const editMilestoneBtn = document.getElementById('edit-milestone-btn');
+        const milestoneEditor = document.getElementById('milestone-editor');
+        const milestoneNameInput = document.getElementById('milestone-name');
+        const milestoneDurationInput = document.getElementById('milestone-duration');
+        const milestoneFocusInput = document.getElementById('milestone-focus');
+        const skill1Input = document.getElementById('skill-1-input');
+        const skill2Input = document.getElementById('skill-2-input');
+        const skill3Input = document.getElementById('skill-3-input');
+        const saveMilestoneBtn = document.getElementById('save-milestone-btn');
+        const cancelMilestoneEditBtn = document.getElementById('cancel-milestone-edit');
 
         // Initialize
         function initializeApp() {
@@ -1390,6 +1490,7 @@
             // Set up event listeners
             setupEventListeners();
             setupTaskEditing();
+            setupMilestoneEditing();
             
             // Debug: Log loaded state
             console.log("Loaded progress:", gameState);
@@ -1735,6 +1836,95 @@
             
             // Save the updated roadmap
             saveProgress();
+        }
+        
+        // Milestone Editing Functions
+        function setupMilestoneEditing() {
+            editMilestoneBtn.addEventListener('click', function() {
+                if (milestoneEditor.style.display === 'none') {
+                    // Enter edit mode
+                    milestoneEditor.style.display = 'block';
+                    editMilestoneBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 5px;">
+                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                        </svg>
+                        Cancel Editing
+                    `;
+                    
+                    // Populate current milestone data
+                    const currentPhase = determineCurrentPhase();
+                    milestoneNameInput.value = currentPhase.name;
+                    
+                    // Extract duration number from string (e.g. "3 months" -> 3)
+                    const durationMatch = currentPhase.duration.match(/\d+/);
+                    milestoneDurationInput.value = durationMatch ? durationMatch[0] : '3';
+                    
+                    milestoneFocusInput.value = currentPhase.focus;
+                    
+                    // Set skill names based on current phase
+                    if (currentPhase === gameState.learningRoadmap.phase1) {
+                        skill1Input.value = "HTML/CSS Fundamentals";
+                        skill2Input.value = "JavaScript Mastery";
+                        skill3Input.value = "Security Basics";
+                    } else if (currentPhase === gameState.learningRoadmap.phase2) {
+                        skill1Input.value = "React Framework";
+                        skill2Input.value = "Node.js/Express";
+                        skill3Input.value = "API Security";
+                    } else {
+                        skill1Input.value = "Cybersecurity";
+                        skill2Input.value = "Cloud Computing";
+                        skill3Input.value = "Content Creation";
+                    }
+                } else {
+                    // Cancel edit mode
+                    milestoneEditor.style.display = 'none';
+                    editMilestoneBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 5px;">
+                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                        </svg>
+                        Edit
+                    `;
+                }
+            });
+            
+            saveMilestoneBtn.addEventListener('click', function() {
+                const currentPhase = determineCurrentPhase();
+                
+                // Update milestone details
+                currentPhase.name = milestoneNameInput.value;
+                currentPhase.duration = `${milestoneDurationInput.value} ${milestoneDurationInput.value === '1' ? 'month' : 'months'}`;
+                currentPhase.focus = milestoneFocusInput.value;
+                
+                // Update skill names in display
+                document.getElementById('skill-1-name').textContent = skill1Input.value;
+                document.getElementById('skill-2-name').textContent = skill2Input.value;
+                document.getElementById('skill-3-name').textContent = skill3Input.value;
+                
+                // Exit edit mode
+                milestoneEditor.style.display = 'none';
+                editMilestoneBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 5px;">
+                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                    </svg>
+                    Edit
+                `;
+                
+                // Update current milestone display
+                updateCurrentPhaseDisplay();
+                
+                // Save changes
+                saveProgress();
+            });
+            
+            cancelMilestoneEditBtn.addEventListener('click', function() {
+                milestoneEditor.style.display = 'none';
+                editMilestoneBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 5px;">
+                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                    </svg>
+                    Edit
+                `;
+            });
         }
         
         // Level Functions
