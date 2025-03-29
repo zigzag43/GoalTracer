@@ -1138,7 +1138,8 @@
                 cloud: 0,
                 content: 0
             },
-            completedTasksHistory: {} // Track completed tasks by day
+            completedTasksHistory: {}, // Track completed tasks by day
+            customTasks: {} // Store custom tasks for each day
         };
 
         // Calculate days until June 2027 (milestone end)
@@ -1342,6 +1343,11 @@
             const currentDayName = dayNames[gameState.currentDay];
             const currentPhase = determineCurrentPhase();
             
+            // Check if we have custom tasks for this day
+            if (gameState.customTasks[currentDayName]) {
+                return gameState.customTasks[currentDayName];
+            }
+            
             // Get base tasks from current phase
             let tasks = currentPhase.tasks[currentDayName] || [];
             
@@ -1367,7 +1373,7 @@
                 return {
                     text: task,
                     time: timeEstimate,
-                    id: `${currentDayName}-${index}` // Unique ID for each task
+                    id: `${currentDayName}-${index}`
                 };
             });
         }
@@ -1511,7 +1517,7 @@
             taskCount.textContent = `${tasks.length} tasks`;
             
             tasks.forEach((task, index) => {
-                const taskId = task.id;
+                const taskId = task.id || `${currentDayName}-${index}`;
                 const isCompleted = gameState.completedTasksHistory[taskId] || false;
                 
                 if (isCompleted) {
@@ -1557,6 +1563,11 @@
             startTimerBtn.disabled = true;
             resetTimerBtn.disabled = false;
             updateTimerDisplay();
+            
+            // Clear any existing interval
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
             
             gameState.timerInterval = setInterval(() => {
                 gameState.secondsLeft--;
@@ -1718,9 +1729,13 @@
                     // Populate editable task list
                     editableTaskList.innerHTML = '';
                     const tasks = Array.from(document.querySelectorAll('.task-item')).map(taskItem => {
+                        const timeText = taskItem.querySelector('.task-time').textContent;
+                        const timeValue = timeText.includes('min') ? timeText.replace(' min', '') : 
+                                         timeText.includes('hour') ? '60' : '30';
+                        
                         return {
                             text: taskItem.querySelector('.task-text').textContent,
-                            time: taskItem.querySelector('.task-time').textContent,
+                            time: timeValue,
                             completed: taskItem.classList.contains('completed')
                         };
                     });
@@ -1730,7 +1745,7 @@
                     });
                     
                     if (tasks.length === 0) {
-                        addEditableTask('', '30 min', false); // Add one empty task by default
+                        addEditableTask('', '30', false); // Add one empty task by default
                     }
                 } else {
                     // Cancel edit mode
@@ -1745,7 +1760,7 @@
             });
             
             addTaskBtn.addEventListener('click', function() {
-                addEditableTask('', '30 min', false);
+                addEditableTask('', '30', false);
             });
             
             saveTasksBtn.addEventListener('click', function() {
@@ -1785,8 +1800,6 @@
         }
 
         function addEditableTask(text, time, completed) {
-            const timeValue = time.includes('min') ? time.replace(' min', '') : '30';
-            
             const taskDiv = document.createElement('div');
             taskDiv.className = 'editable-task';
             taskDiv.style.display = 'flex';
@@ -1800,12 +1813,12 @@
                 <input type="text" class="task-text-input" value="${text}" placeholder="Task description" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-right: 10px;">
                 
                 <select class="task-time-select" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-right: 10px;">
-                    <option value="15" ${timeValue === '15' ? 'selected' : ''}>15 min</option>
-                    <option value="30" ${timeValue === '30' ? 'selected' : ''}>30 min</option>
-                    <option value="45" ${timeValue === '45' ? 'selected' : ''}>45 min</option>
-                    <option value="60" ${timeValue === '60' ? 'selected' : ''}>1 hour</option>
-                    <option value="90" ${timeValue === '90' ? 'selected' : ''}>1.5 hours</option>
-                    <option value="120" ${timeValue === '120' ? 'selected' : ''}>2 hours</option>
+                    <option value="15" ${time === '15' ? 'selected' : ''}>15 min</option>
+                    <option value="30" ${time === '30' ? 'selected' : ''}>30 min</option>
+                    <option value="45" ${time === '45' ? 'selected' : ''}>45 min</option>
+                    <option value="60" ${time === '60' ? 'selected' : ''}>1 hour</option>
+                    <option value="90" ${time === '90' ? 'selected' : ''}>1.5 hours</option>
+                    <option value="120" ${time === '120' ? 'selected' : ''}>2 hours</option>
                 </select>
                 
                 <button class="btn btn-danger remove-task-btn" style="padding: 8px 12px;">
@@ -1827,14 +1840,13 @@
             const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
             const currentDayName = dayNames[gameState.currentDay];
             
-            // Update the learning roadmap with new tasks
-            const currentPhase = determineCurrentPhase();
-            currentPhase.tasks[currentDayName] = newTasks.map(task => task.text);
+            // Store custom tasks in game state
+            gameState.customTasks[currentDayName] = newTasks;
             
             // Regenerate tasks for the current day
             loadTasksForCurrentDay();
             
-            // Save the updated roadmap
+            // Save the updated state
             saveProgress();
         }
         
@@ -2074,6 +2086,18 @@
                             gameState.completedTasksHistory = {};
                         }
                         
+                        // Initialize customTasks if it doesn't exist
+                        if (!gameState.customTasks) {
+                            gameState.customTasks = {};
+                        }
+                        
+                        // Restore timer state if it was running
+                        if (gameState.timerRunning) {
+                            startTimer();
+                        } else {
+                            updateTimerDisplay();
+                        }
+                        
                         console.log("Loaded progress:", gameState); // Debug log
                     }
                 }
@@ -2124,7 +2148,8 @@
                     learningRoadmap: gameState.learningRoadmap,
                     currentWeek: gameState.currentWeek,
                     skillProgress: gameState.skillProgress,
-                    completedTasksHistory: gameState.completedTasksHistory
+                    completedTasksHistory: gameState.completedTasksHistory,
+                    customTasks: gameState.customTasks
                 },
                 notes: notesTextarea.value,
                 timestamp: new Date().toISOString()
