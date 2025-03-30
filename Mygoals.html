@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1394,28 +1393,27 @@
             document.getElementById('current-phase-duration').textContent = `Duration: ${currentPhase.duration}`;
             document.getElementById('current-phase-focus').textContent = `Focus: ${currentPhase.focus}`;
             
-            // Update skill progress based on phase
+            // Update skill names and progress based on phase
             if (currentPhase === gameState.learningRoadmap.phase1) {
-                document.getElementById('skill-1-name').textContent = "HTML/CSS Fundamentals";
-                document.getElementById('skill-2-name').textContent = "JavaScript Mastery";
-                document.getElementById('skill-3-name').textContent = "Security Basics";
+                document.getElementById('skill-1-name').textContent = skill1Input.value || "HTML/CSS Fundamentals";
+                document.getElementById('skill-2-name').textContent = skill2Input.value || "JavaScript Mastery";
+                document.getElementById('skill-3-name').textContent = skill3Input.value || "Security Basics";
                 
-                // Update progress bars
                 updateSkillProgress('skill-1', gameState.skillProgress.htmlCss);
                 updateSkillProgress('skill-2', gameState.skillProgress.javascript);
                 updateSkillProgress('skill-3', gameState.skillProgress.security);
             } else if (currentPhase === gameState.learningRoadmap.phase2) {
-                document.getElementById('skill-1-name').textContent = "React Framework";
-                document.getElementById('skill-2-name').textContent = "Node.js/Express";
-                document.getElementById('skill-3-name').textContent = "API Security";
+                document.getElementById('skill-1-name').textContent = skill1Input.value || "React Framework";
+                document.getElementById('skill-2-name').textContent = skill2Input.value || "Node.js/Express";
+                document.getElementById('skill-3-name').textContent = skill3Input.value || "API Security";
                 
                 updateSkillProgress('skill-1', gameState.skillProgress.react);
                 updateSkillProgress('skill-2', gameState.skillProgress.node);
                 updateSkillProgress('skill-3', gameState.skillProgress.security);
             } else {
-                document.getElementById('skill-1-name').textContent = "Cybersecurity";
-                document.getElementById('skill-2-name').textContent = "Cloud Computing";
-                document.getElementById('skill-3-name').textContent = "Content Creation";
+                document.getElementById('skill-1-name').textContent = skill1Input.value || "Cybersecurity";
+                document.getElementById('skill-2-name').textContent = skill2Input.value || "Cloud Computing";
+                document.getElementById('skill-3-name').textContent = skill3Input.value || "Content Creation";
                 
                 updateSkillProgress('skill-1', gameState.skillProgress.security);
                 updateSkillProgress('skill-2', gameState.skillProgress.cloud);
@@ -1903,15 +1901,25 @@
             saveMilestoneBtn.addEventListener('click', function() {
                 const currentPhase = determineCurrentPhase();
                 
-                // Update milestone details
+                // Update milestone details in the learning roadmap
                 currentPhase.name = milestoneNameInput.value;
                 currentPhase.duration = `${milestoneDurationInput.value} ${milestoneDurationInput.value === '1' ? 'month' : 'months'}`;
                 currentPhase.focus = milestoneFocusInput.value;
                 
-                // Update skill names in display
-                document.getElementById('skill-1-name').textContent = skill1Input.value;
-                document.getElementById('skill-2-name').textContent = skill2Input.value;
-                document.getElementById('skill-3-name').textContent = skill3Input.value;
+                // Reset skill progress when changing skills
+                if (currentPhase === gameState.learningRoadmap.phase1) {
+                    gameState.skillProgress.htmlCss = 0;
+                    gameState.skillProgress.javascript = 0;
+                    gameState.skillProgress.security = 0;
+                } else if (currentPhase === gameState.learningRoadmap.phase2) {
+                    gameState.skillProgress.react = 0;
+                    gameState.skillProgress.node = 0;
+                    gameState.skillProgress.security = 0;
+                } else {
+                    gameState.skillProgress.security = 0;
+                    gameState.skillProgress.cloud = 0;
+                    gameState.skillProgress.content = 0;
+                }
                 
                 // Exit edit mode
                 milestoneEditor.style.display = 'none';
